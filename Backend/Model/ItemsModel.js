@@ -9,7 +9,11 @@ const ItemSchema = new Schema({
   Mrp: { type: Number },
   ExpiryDate: { type: Date, required: true },
   Category: { type: String, required: true },
-  Notes:{type : String}
+  Notes: { type: String },
+  managerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 exports.Item = mongoose.model("Item", ItemSchema);

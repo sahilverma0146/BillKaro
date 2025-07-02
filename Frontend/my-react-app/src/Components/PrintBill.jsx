@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Toaster, toast } from "alert";
-import {useNavigate} from 'react-router-dom'
-import { useSelector , useDispatch} from "react-redux";
-import {cartEmpty} from '../Feature/Cart/CartItems';
-import {resetValue} from '../Feature/Cart/cartSlice'
-
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { cartEmpty } from "../Feature/Cart/CartItems";
+import { resetValue } from "../Feature/Cart/cartSlice";
+// const jwt = require('jsonwebtoken');
 
 export default function GroceryReceipt() {
   const navigate = useNavigate();
@@ -13,19 +13,54 @@ export default function GroceryReceipt() {
   const total = useSelector((state) => state.cartItems.cartTotal);
 
   useEffect(() => {
-    console.log(cart);
+    console.log("YOUR CART ITEMS ARE" , cart);
   }, []);
   const currentDate = new Date();
- 
-  const handlePrint = () =>{
-    dispatch(cartEmpty());
-    dispatch(resetValue())
-    toast("Collect Your Bill");
 
-    navigate('/');
-    
-    
+ const handlePrint = async () => {
+  try {
+    const token = localStorage.getItem("token"); // ✅ Make sure token is retrieved correctly
+    // const userId = localStorage.getItem("userId"); // ✅ Correct key used
+
+    // if (!token || !userId) {
+    //   toast.error("User not authenticated");
+    //   return navigate("/login");
+    // }
+    const CustomerName = "Devi Lal";
+    const PhoneNumber = 7497057346;
+    const Address = "Sonipat";
+
+    const response = await fetch("http://localhost:8081/api/saveBill", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        CustomerName,
+        PhoneNumber,
+        Address,
+        Cart: cart,
+        Mrp: total,
+        // user: userId,
+      }),
+    });
+
+    const data = await response.json();
+    console.log("Saved bill data:", data);
+
+    // Success actions
+    dispatch(cartEmpty());
+    dispatch(resetValue());
+    toast.success("Collect Your Bill");
+    navigate("/");
+
+  } catch (error) {
+    console.error("Bill save error:", error);
+    toast.error("Failed to save the bill");
   }
+};
+
   return (
     <>
       <div className="min-h-screen bg-gray-100 p-4 flex items-center justify-center">
@@ -162,7 +197,7 @@ export default function GroceryReceipt() {
 
       <Toaster></Toaster>
       <button
-        onClick={()=>handlePrint()}
+        onClick={() => handlePrint()}
         className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition duration-300 ease-in-out"
       >
         Print the Bill

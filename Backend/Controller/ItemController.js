@@ -3,13 +3,15 @@ const ItemsModel = model.Item;
 
 exports.AddItem = async (req, res) => {
   try {
-    const { ItemName,Quantity, BrandName, Unit, Mrp, ExpiryDate, Category, Notes } =
+    const { ItemName,Quantity, BrandName, Unit, Mrp, ExpiryDate, Category, Notes , managerId} =
       req.body;
 
     if (!ItemName && !Mrp && !Category) {
       console.log("please fill the inputs properly");
       return;
     }
+
+    const id = req.user._id;
     const item = await new ItemsModel({
       ItemName,
       BrandName,
@@ -19,6 +21,7 @@ exports.AddItem = async (req, res) => {
       ExpiryDate,
       Category,
       Notes,
+      managerId : id
     });
     res
       .status(200)
@@ -31,7 +34,8 @@ exports.AddItem = async (req, res) => {
 
 exports.GetItem = async (req, res) => {
   try {
-    const itemList = await ItemsModel.find();
+    const id = req.user._id;
+    const itemList = await ItemsModel.find({managerId : id});
     res
       .status(200)
       .json({ message: "Your List are DownBelow", success: true, itemList });

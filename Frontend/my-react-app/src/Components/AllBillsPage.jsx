@@ -86,7 +86,7 @@ function AllBillsPage() {
                         key={pIndex}
                         className="flex items-center justify-between bg-white rounded p-3 shadow-sm"
                       >
-                        <span className="text-gray-800 font-medium">{prod.name}</span>
+                        <span className="text-gray-800 font-medium">{prod.ItemName}</span>
                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                           <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
                             ₹{prod.Mrp}
@@ -99,7 +99,7 @@ function AllBillsPage() {
                     ))
                   ) : items.Cart && typeof items.Cart === "object" ? (
                     <div className="flex items-center justify-between bg-white rounded p-3 shadow-sm">
-                      <span className="text-gray-800 font-medium">{items.Cart.name}</span>
+                      <span className="text-gray-800 font-medium">{items.Cart.ItemName}</span>
                       <div className="flex items-center space-x-2 text-sm text-gray-600">
                         <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded">
                           ₹{items.Cart.Mrp}

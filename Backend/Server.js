@@ -20,24 +20,19 @@ const authMiddleware = require("./Controller/authMiddleware");
 
 app.use("/api", router);
 
-app.use("/", (req, res) => {
-  res.send({
-    activeStatus:true,
-    error : false,
-  })
-});
-
-
+// item routes 
 router.post("/NewItem", authMiddleware, ItemRouter.AddItem);
 router.get("/GetItem", authMiddleware, ItemRouter.GetItem);
 
+// customer routes 
 router.post("/AddCustomer", authMiddleware, CustomerRouter.ProduceBill);
-router.get("/getCustomer/:_id", authMiddleware, CustomerRouter.FetchCustomer);
+router.get("/getCustomer", authMiddleware, CustomerRouter.FetchCustomer);
 router.post("/saveBill", authMiddleware, CustomerRouter.SaveBill);
-router.get("/getBill", authMiddleware, CustomerRouter.getBills);
+router.get("/getBill", authMiddleware , CustomerRouter.getBills);
 
-app.post("/api/auth/register", AuthController.register);
-app.post("/api/auth/login", AuthController.login);
+// auth routes
+router.post("/register", AuthController.register);
+router.post("/login", AuthController.login);
 
 // connection
 main().catch((err) => console.log(err));

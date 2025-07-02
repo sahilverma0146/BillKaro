@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const BillsSchema = new Schema({
@@ -7,6 +7,11 @@ const BillsSchema = new Schema({
   Address: { type: String, required: true },
   Cart: { type: Object },
   Mrp: { type: Number },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 });
 
 exports.BillsModel = mongoose.model("BillsModel", BillsSchema);

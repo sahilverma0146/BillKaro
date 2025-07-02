@@ -15,7 +15,13 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-}, { timestamps: true });
+  role : {
+    type : String,
+    enum :["admin" , "manager"],
+    default : "manager"
+  } 
+ 
+}, { timestamps: true } , );
 
 UserSchema.pre('save', async function (next) {
   if (!this.isModified('password')) return next();
@@ -28,6 +34,7 @@ UserSchema.pre('save', async function (next) {
   }
 });
 
+// to add a custom method
 UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

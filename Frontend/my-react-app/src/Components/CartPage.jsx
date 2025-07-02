@@ -59,6 +59,7 @@ function CartPage() {
     }
     const data = await response.json();
     console.log(data);
+    const id = localStorage.setItem("userId" , data.newCustomer._id )
     console.log("your _id is " , data.newCustomer._id )
     JSON.stringify(localStorage.setItem("PhoneNumber",data.newCustomer.PhoneNumber ));
     

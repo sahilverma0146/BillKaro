@@ -1,40 +1,37 @@
 const Model = require("../Model/CustomerDetails");
 const Customermodel = Model.customerModel;
 
-const model2 = require('../Model/AllBills')
-const  BillsModel = model2.BillsModel;
+const model2 = require("../Model/AllBills");
+const BillsModel = model2.BillsModel;
 
 var jwt = require("jsonwebtoken");
 
+// creating new customer
 exports.ProduceBill = async (req, res) => {
-  const { CustomerName, PhoneNumber, Address, Mode } = req.body;
-  var token = jwt.sign({ name: req.body.PhoneNumber }, "shhhhh");
-  console.log(token);
-
-  // var decoded = jwt.verify(token, "shhhhh");
-  // console.log(" your decoded token is",decoded);
+  const userId = req.user._id;
+  const { CustomerName, PhoneNumber, Address, Mode , user } = req.body;
+  
 
   const newCustomer = new Customermodel({
     CustomerName,
     PhoneNumber,
     Address,
     Mode,
-    Token: token,
+    user:userId
   });
-  // newCustomer.Token = token;
 
   newCustomer.save();
   res
     .status(200)
-    .json({ success: true, message: "item created successfully", newCustomer });
+    .json({ success: true, message: "user created successfully", newCustomer });
 };
 
 exports.FetchCustomer = async (req, res) => {
   try {
-    const _id = req.params;
-    console.log(_id);
+    const userId = req.user._id;
+    console.log("THE USER ID " , userId);
 
-    const fetchedUsers = await Customermodel.findOne({ PhoneNumber: _id });
+    const fetchedUsers = await Customermodel.find({ user : userId });
     res
       .status(200)
       .json({ message: "yes u fetched", success: true, fetchedUsers });
@@ -45,33 +42,35 @@ exports.FetchCustomer = async (req, res) => {
 };
 
 exports.SaveBill = async (req, res) => {
-  const {CustomerName , PhoneNumber , Address , Cart , Mrp } = req.body;
+  const { CustomerName, PhoneNumber, Address, Cart, Mrp, user } = req.body;
 
-  const newBill = new BillsModel({
+  const userId = req.user._id;
+   const newBill = new BillsModel({ 
     CustomerName,
-    PhoneNumber ,
-    Address , 
+    PhoneNumber,
+    Address,
     Cart,
-    Mrp
+    Mrp,
+    user : userId,
   });
 
   newBill.save();
-  res.status(200).json({success : true , newBill})
+  res.status(200).json({ success: true, newBill });
 };
-
 
 exports.getBills = async (req, res) => {
   try {
-    const allBills = await BillsModel.find(); // Fetch all documents from the 'bills' collection
+    const  user  = req.user._id;
+    const allBills = await BillsModel.find({ user: user });
     res.status(200).json({
       success: true,
-      data: allBills
+      data: allBills,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch bills',
-      error: error.message
+      message: "Failed to fetch bills",
+      error: error.message,
     });
   }
-}
+};
