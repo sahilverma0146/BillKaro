@@ -17,6 +17,8 @@ const ItemRouter = require("./Controller/ItemController");
 const CustomerRouter = require("./Controller/CustomerController");
 const AuthController = require("./Controller/AuthController");
 const authMiddleware = require("./Controller/authMiddleware");
+const roleController = require("./Controller/roleController");
+
 
 app.use("/api", router);
 
@@ -29,11 +31,12 @@ router.post("/AddCustomer", authMiddleware, CustomerRouter.ProduceBill);
 router.get("/getCustomer", authMiddleware, CustomerRouter.FetchCustomer);
 router.post("/saveBill", authMiddleware, CustomerRouter.SaveBill);
 router.get("/getBill", authMiddleware , CustomerRouter.getBills);
-
+router.get('/managerList' , authMiddleware , CustomerRouter.fetchManagers)
 // auth routes
 router.post("/register", AuthController.register);
 router.post("/login", AuthController.login);
 
+router.get('/manageRole' , authMiddleware , roleController.roleDetermine)
 // connection
 main().catch((err) => console.log(err));
 async function main() {

@@ -9,7 +9,7 @@ import AllBillsPage from "./Components/AllBillsPage";
 import Register from "./Components/Register";
 import Login from "./Components/Login";
 import { AuthProvider, useAuth } from "./Components/AuthContext";
-// import SaveBill from "./Components/SaveBill";
+import ManageStore from "./Components/ManageStore";
 
 function NavBar() {
   const { user, logout } = useAuth();
@@ -52,14 +52,14 @@ function App() {
               </Home>
             }
           ></Route>
-          {/* <Route
-            path="/save"
+          <Route
+            path="/manageStore"
             element={
               <Home>
-                <SaveBill></SaveBill>
+                <ManageStore></ManageStore>
               </Home>
             }
-          ></Route> */}
+          ></Route>
 
           <Route
             path="/PrintBill"
