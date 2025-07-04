@@ -12,8 +12,7 @@ import { Layout, Menu } from "antd";
 import React, { useEffect, useState } from "react";
 const { Header, Sider, Content } = Layout;
 import { useSelector } from "react-redux";
-import { useAuth } from './AuthContext';
-
+import { useAuth } from "./AuthContext";
 
 const Home = ({ children }) => {
   const cart = useSelector((state) => state.cart.value);
@@ -21,7 +20,7 @@ const Home = ({ children }) => {
   const navigate = useNavigate();
   const [role, setRole] = useState("");
 
-  const {logout} = useAuth();
+  const { logout } = useAuth();
   useEffect(() => {
     "";
     const roleDetermine = async () => {
@@ -70,8 +69,13 @@ const Home = ({ children }) => {
     }
     if (k.key == String(6)) {
       console.log("you are 6");
-      logout()
-      navigate('/login')
+      logout();
+      navigate("/login");
+    }
+    if (k.key == String(8)) {
+      console.log("you are 8");
+      // logout()
+      navigate("/Analytics");
     }
   };
   return (
@@ -155,8 +159,19 @@ const Home = ({ children }) => {
                     },
                   ]
                 : []),
+
+              ...(role === "admin"
+                ? [
+                    {
+                      key: "8",
+                      icon: <UploadOutlined className="text-lg" />,
+                      label: "Analysis",
+                      className:
+                        "hover:bg-red-500 transition-all duration-200 rounded-lg mx-2 mb-1",
+                    },
+                  ]
+                : []),
             ]}
-            // defaultSelectedKeys={items.key}
           />
         </Sider>
         <Layout className="site-layout">

@@ -10,6 +10,8 @@ import Register from "./Components/Register";
 import Login from "./Components/Login";
 import { AuthProvider, useAuth } from "./Components/AuthContext";
 import ManageStore from "./Components/ManageStore";
+import Analytics from "./Components/Analytics";
+import SingleManagerAnalysis from "./Components/SingleManagerAnalysis";
 
 function NavBar() {
   const { user, logout } = useAuth();
@@ -17,11 +19,17 @@ function NavBar() {
     <nav className="p-4 bg-gray-100 flex gap-4">
       {!user ? (
         <>
-          <a href="/register" className="text-blue-600">Register</a>
-          <a href="/login" className="text-blue-600">Login</a>
+          <a href="/register" className="text-blue-600">
+            Register
+          </a>
+          <a href="/login" className="text-blue-600">
+            Login
+          </a>
         </>
       ) : (
-        <button onClick={logout} className="text-red-600">Logout</button>
+        <button onClick={logout} className="text-red-600">
+          Logout
+        </button>
       )}
     </nav>
   );
@@ -74,6 +82,22 @@ function App() {
             element={
               <Home>
                 <AllBillsPage></AllBillsPage>
+              </Home>
+            }
+          ></Route>
+          <Route
+            path="/Analytics"
+            element={
+              <Home>
+                <Analytics></Analytics>
+              </Home>
+            }
+          ></Route>
+          <Route
+            path="/SingleManagerAnalysis"
+            element={
+              <Home>
+                <SingleManagerAnalysis></SingleManagerAnalysis>
               </Home>
             }
           ></Route>

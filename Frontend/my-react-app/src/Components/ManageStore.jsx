@@ -1,58 +1,8 @@
-// import { useState } from "react";
-// import { useEffect } from "react";
-
-// function ManageStore() {
-//   const [manager, setManager] = useState([]);
-//   useEffect(() => {
-//     const fetchManagers = async () => {
-//       try {
-//         let token = localStorage.getItem("token");
-//         const data = await fetch("http://localhost:8081/api/managerList", {
-//           method: "GET",
-//           headers: {
-//             Authorization: `Bearer ${token}`,
-//           },
-//         });
-//         const fetchedManagers = await data.json();
-//         const manager = fetchedManagers.fetchedUsers;
-//         console.log(manager);
-//         setManager(manager);
-//       } catch (error) {
-//         {
-//           console.log(error);
-//         }
-//       }
-//     };
-//     fetchManagers();
-//   }, []);
-
-//   return (
-//     <>
-//       {/* show all the managers  */}
-//       <div>list od all the stores</div>
-//       <div>
-//         {manager.map((i, index) => {
-//           return (
-//             <>
-//               <div key={index}>
-//                 <div>{i.email}</div>
-//                 <div>{i.name}</div>
-//               </div>
-//             </>
-//           );
-//         })}
-//       </div>
-//     </>
-//   );
-// }
-// export default ManageStore;
-
-
-
-
 import { useState, useEffect } from "react";
 
+import { useNavigate } from "react-router-dom";
 function ManageStore() {
+  const navigate = useNavigate();
   const [manager, setManager] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -61,21 +11,7 @@ function ManageStore() {
     const fetchManagers = async () => {
       try {
         setLoading(true);
-        // Note: localStorage is not available in this environment
-        // Using mock data for demonstration
-        // const mockManagers = [
-        //   { id: 1, email: "john.doe@store.com", name: "John Doe" },
-        //   { id: 2, email: "jane.smith@store.com", name: "Jane Smith" },
-        //   { id: 3, email: "mike.johnson@store.com", name: "Mike Johnson" },
-        // ];
-        
-        // // Simulate API delay
-        // setTimeout(() => {
-        //   setManager(mockManagers);
-        //   setLoading(false);
-        // }, 1000);
 
-        // Original API call (commented out for demo):
         let token = localStorage.getItem("token");
         const data = await fetch("http://localhost:8081/api/managerList", {
           method: "GET",
@@ -87,7 +23,6 @@ function ManageStore() {
         const manager = fetchedManagers.fetchedUsers;
         setManager(manager);
         setLoading(false);
-        
       } catch (error) {
         console.log(error);
         setError("Failed to fetch managers");
@@ -119,13 +54,19 @@ function ManageStore() {
       </div>
     );
   }
+  const handleManager = (manager) => {
+    console.log(" the manager email is", manager[0].email);
+    navigate("/SingleManagerAnalysis");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Store Managers</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Store Managers
+          </h1>
           <p className="text-gray-600">Manage and view all store managers</p>
         </div>
 
@@ -133,7 +74,8 @@ function ManageStore() {
         <div className="mb-6">
           <div className="bg-blue-100 border border-blue-200 rounded-lg p-4">
             <p className="text-blue-800">
-              <span className="font-semibold">{manager.length}</span> manager{manager.length !== 1 ? 's' : ''} found
+              <span className="font-semibold">{manager.length}</span> manager
+              {manager.length !== 1 ? "s" : ""} found
             </p>
           </div>
         </div>
@@ -149,17 +91,23 @@ function ManageStore() {
                 <div className="flex items-center space-x-3 mb-4">
                   <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
                     <span className="text-blue-600 font-semibold text-lg">
-                      {i.name ? i.name.charAt(0).toUpperCase() : 'M'}
+                      {i.name ? i.name.charAt(0).toUpperCase() : "M"}
                     </span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-gray-900">{i.name}</h3>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {i.name}
+                    </h3>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <div className="flex items-center text-gray-600">
-                    <svg className="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      className="w-4 h-4 mr-2"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path>
                       <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path>
                     </svg>
@@ -168,7 +116,10 @@ function ManageStore() {
                 </div>
 
                 <div className="mt-4 pt-4 border-t border-gray-100">
-                  <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm font-medium">
+                  <button
+                    onClick={() => handleManager(manager)}
+                    className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors duration-200 text-sm font-medium"
+                  >
                     View Details
                   </button>
                 </div>
@@ -178,12 +129,26 @@ function ManageStore() {
         ) : (
           <div className="text-center py-12">
             <div className="w-24 h-24 mx-auto bg-gray-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              <svg
+                className="w-12 h-12 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
               </svg>
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No managers found</h3>
-            <p className="text-gray-500">There are currently no store managers to display.</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No managers found
+            </h3>
+            <p className="text-gray-500">
+              There are currently no store managers to display.
+            </p>
           </div>
         )}
       </div>
